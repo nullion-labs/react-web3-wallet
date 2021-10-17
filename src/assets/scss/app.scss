@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+body {
+    background-color: black;
+}
+.wallet {
+    font-family: Roboto;
+    border: 1px solid seagreen;
+    background-color: black;
+    box-shadow: 0 0 4px 0px seagreen;
+    outline: none;
+    color: white;
+    transition: all;
+    padding: 6px;
+    span {
+        margin-right: 16px;
+    }
+    a {
+        cursor: pointer;
+        color: seagreen;
+    }
+}
+.Toastify__toast {
+    border-radius: 0 !important;
+}
+.Toastify__toast--default {
+    border: 1px solid var(--toastify-color-progress-dark);
+}
+.Toastify__toast--info {
+    border: 1px solid var(--toastify-color-info);
+}
+.Toastify__toast--success {
+    border: 1px solid var(--toastify-color-success);
+}
+.Toastify__toast--warning {
+    border: 1px solid var(--toastify-color-warning);
+}
+.Toastify__toast--error {
+    border: 1px solid var(--toastify-color-error);
+}
