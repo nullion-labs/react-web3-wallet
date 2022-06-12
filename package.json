@@ -4,9 +4,9 @@
     "description": "React wrapper for web3 wallet",
     "author": "Vukasin Pesic",
     "license": "MIT",
-    "main": "./lib/nullius.js",
+    "main": "./dist/nullius.js",
     "directories": {
-        "dist": "lib"
+        "dist": "dist"
     },
     "repository": {
         "type": "git",

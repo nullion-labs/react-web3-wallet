@@ -4,7 +4,7 @@ module.exports = {
     mode: 'production',
     entry: './src/nullius.js',
     output: {
-        path: path.resolve('lib'),
+        path: path.resolve('dist'),
         filename: 'nullius.js',
         libraryTarget: 'commonjs2'
     },
