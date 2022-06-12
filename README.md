@@ -1,4 +1,4 @@
-# Nullius
+# Nullius 👛
 
 React wrapper for web3 wallet
 
