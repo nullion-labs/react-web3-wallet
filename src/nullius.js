@@ -65,7 +65,7 @@ export class Provider extends Component {
 export function useWallet() {
     const context = React.useContext(WalletContext);
     if (context === undefined) {
-        throw new Error('useWallet must be used within a NullProvider');
+        throw new Error('useWallet must be used within a Provider');
     }
     return context;
 }
