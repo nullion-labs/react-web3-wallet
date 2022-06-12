@@ -1,6 +1,6 @@
 {
     "name": "@nullion-labs/react-web3-wallet",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "React wrapper for web3 wallet",
     "license": "MIT",
     "main": "./lib/nullius.js",
