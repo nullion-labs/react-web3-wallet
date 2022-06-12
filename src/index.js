@@ -1,20 +1,31 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import { WalletConnect, WalletProvider, WalletToast } from './NullETH';
+import { createRoot } from 'react-dom/client';
+import { Provider, WalletConnect, WalletInfo } from './nullius';
 
 export default class Index extends Component {
-    componentDidMount() {
-        WalletToast.process('hello');
+    constructor(props) {
+        super(props);
     }
     render() {
         return (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100vh' }}>
-                <WalletProvider>
+            <div
+                style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '100%',
+                    height: '100vh'
+                }}>
+                <Provider>
+                    <WalletInfo />
                     <WalletConnect />
-                </WalletProvider>
+                </Provider>
             </div>
         );
     }
 }
 
-ReactDOM.render(<Index />, document.getElementById('root'));
+const container = document.getElementById('root');
+const root = createRoot(container);
+root.render(<Index />);

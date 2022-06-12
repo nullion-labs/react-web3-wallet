@@ -1,13 +1,14 @@
 const path = require('path');
-
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 module.exports = {
     mode: 'production',
-    entry: './src/NullETH.js',
+    entry: './src/nullius.js',
     output: {
         path: path.resolve('lib'),
-        filename: 'NullETH.js',
+        filename: 'nullius.js',
         libraryTarget: 'commonjs2'
     },
+    plugins: [new CleanWebpackPlugin()],
     module: {
         rules: [
             {
@@ -40,7 +41,6 @@ module.exports = {
                         loader: 'url-loader',
                         options: {
                             generator: (content, mimetype, encoding, resourcePath) => {
-                                console.log(resourcePath);
                                 return `data:${mimetype}${encoding ? `;${encoding}` : ''},${content.toString(encoding)}`;
                             }
                         }
