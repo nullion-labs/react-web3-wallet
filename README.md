@@ -12,11 +12,10 @@ npm install @nullion-labs/react-web3-wallet
 yarn add @nullion-labs/react-web3-wallet
 ```
 
-#### Usage
+<!-- #### Usage
 
 ```js
 
-``` 
+```  -->
 
 ## Roadmap 📈
- 
