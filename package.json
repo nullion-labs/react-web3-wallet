@@ -1,16 +1,24 @@
 {
-    "name": "@nullion-labs/react-web3-wallet",
+    "name": "react-web3-wallet",
     "version": "0.0.3",
     "description": "React wrapper for web3 wallet",
+    "author": "Vukasin Pesic",
     "license": "MIT",
     "main": "./lib/nullius.js",
+    "directories": {
+        "dist": "lib"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/nullion-labs/react-web3-wallet.git"
+    },
+    "bugs": {
+        "url": "https://github.com/nullion-labs/react-web3-wallet/issues"
+    },
     "scripts": {
         "start": "react-scripts start",
         "build": "webpack",
         "update": "webpack && git add . && git commit -m 'update' && git push && npm version patch && npm publish"
-    },
-    "publishConfig": {
-        "registry": "https://npm.pkg.github.com"
     },
     "devDependencies": {
         "@babel/core": "^7.18.2",
@@ -45,5 +53,14 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
-    }
+    },
+    "homepage": "https://github.com/nullion-labs/react-web3-wallet#readme",
+    "keywords": [
+        "nullion",
+        "nullius",
+        "web3",
+        "web3 wallet",
+        "wallet",
+        "react"
+    ]
 }
