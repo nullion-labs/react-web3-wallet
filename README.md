@@ -1,4 +1,4 @@
-# Nullius 👛
+# React Web3 Wallet 👛
 
 React wrapper for web3 wallet
 
@@ -19,3 +19,8 @@ yarn add react-web3-wallet
 ```  -->
 
 ## Roadmap 📈
+
+-Custom design
+-Custom callbacks + logic
+-NFT (ERC721 + ERC1155) parsing and function calls
+-Token (ERC20) parsing and function calls

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Provider, WalletConnect, WalletInfo } from './nullius';
+import { Provider, WalletConnect } from './nullius';
 
 export default class Index extends Component {
     constructor(props) {
@@ -18,7 +18,6 @@ export default class Index extends Component {
                     height: '100vh'
                 }}>
                 <Provider>
-                    <WalletInfo />
                     <WalletConnect />
                 </Provider>
             </div>

@@ -1,0 +1,58 @@
+.nullius-wallet-connect-content {
+    h1 {
+        margin: 0;
+    }
+    button {
+        font-family: "Montserrat", sans-serif;
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        width: 100%;
+        padding: 8px 12px;
+        background-color: #333;
+        border: 0;
+        border-radius: 12px;
+        color: white;
+        &:hover {
+            color: rgb(141, 204, 168);
+        }
+        img {
+            width: 30px;
+            height: 30px;
+            margin-right: 5px;
+        }
+        margin-bottom: 12px;
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+.nullius-wallet-connect {
+    // background-color: black;
+    color: white;
+    // border: 3px solid #2a8452;
+    // padding: 20px;
+    font-family: "Montserrat", sans-serif;
+}
+.nullius-wallet-connect-address {
+    font-size: 18px;
+    font-weight: 600;
+    span {
+        &:first-child {
+            padding: 5px 10px;
+            padding-right: 24px;
+            background-color: #111;
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+        }
+        &:last-child {
+            padding: 5px 10px;
+            margin-left: -15px;
+            z-index: 1;
+            background-color: #333;
+            border-radius: 8px;
+        }
+    }
+}
