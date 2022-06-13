@@ -18,7 +18,7 @@
     "scripts": {
         "start": "react-scripts start",
         "build": "webpack",
-        "update": "webpack && git add . && git commit -m 'update' && git push && npm version patch && npm publish"
+        "update": "webpack && git add . && git commit -m update && git push && npm version patch && npm publish"
     },
     "devDependencies": {
         "@babel/core": "^7.18.2",

@@ -2,6 +2,9 @@
     h1 {
         margin: 0;
     }
+    p {
+        margin-bottom: 16px;
+    }
     button {
         font-family: "Montserrat", sans-serif;
         display: flex;
@@ -28,6 +31,9 @@
             margin-bottom: 0;
         }
     }
+}
+.nullius-wallet-connect-button {
+    width: fit-content;
 }
 .nullius-wallet-connect {
     // background-color: black;

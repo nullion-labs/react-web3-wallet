@@ -171,6 +171,7 @@ export function WalletConnect() {
             ) : (
                 <div className="nullius-wallet-connect-content">
                     <button
+                        className="nullius-wallet-connect-button"
                         onClick={(e) => {
                             WalletConnectModal.show(<WalletConnectModalComponent />);
                         }}>
