@@ -128,7 +128,7 @@ root.render(<WalletConnectModal />);
 function WalletConnectModalComponent() {
     const [loading, setLoading] = useState(false);
     return (
-        <div className="nullius-wallet-connect-content" style={{ pointerEvents: loading === true ? 'none' : 'all' }}>
+        <div className="nullius-wallet-modal-content" style={{ pointerEvents: loading === true ? 'none' : 'all' }}>
             <h1>Connect your wallet.</h1>
             <p>Connect with one of our available wallet providers.</p>
             <button

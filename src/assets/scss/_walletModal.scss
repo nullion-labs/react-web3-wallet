@@ -38,7 +38,41 @@
     top: 12px;
     color: white;
     cursor: pointer;
-    &:hover{
+    &:hover {
         color: tomato;
+    }
+}
+.nullius-wallet-modal-content {
+    h1 {
+        margin: 0;
+    }
+    p {
+        margin-bottom: 16px;
+    }
+    button {
+        font-family: "Montserrat", sans-serif;
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        width: 100%;
+        padding: 8px 12px;
+        background-color: #333;
+        border: 0;
+        border-radius: 12px;
+        color: white;
+        &:hover {
+            color: rgb(141, 204, 168);
+        }
+        img {
+            width: 30px;
+            height: 30px;
+            margin-right: 5px;
+        }
+        margin-bottom: 12px;
+        &:last-child {
+            margin-bottom: 0;
+        }
     }
 }
