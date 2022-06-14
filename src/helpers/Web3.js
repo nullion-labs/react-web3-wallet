@@ -1,4 +1,5 @@
 import Web3 from 'web3/dist/web3.min.js';
+import { toast } from 'react-toastify';
 
 function parseBalance(balance, decimal) {
     return parseFloat(Web3.utils.fromWei(Web3.utils.toBN(balance).toString()));
@@ -44,10 +45,13 @@ export const getCurrentWalletConnected = async () => {
 export const connectWallet = async () => {
     if (window.ethereum) {
         try {
-            const addressArray = await window.ethereum.request({
-                method: 'eth_requestAccounts'
-            });
-
+            const addressArray = await window.ethereum
+                .request({
+                    method: 'eth_requestAccounts'
+                })
+                .catch((e) => {
+                    throw e.message;
+                });
             if (addressArray.length > 0) {
                 let balance = await window.ethereum.request({
                     jsonrpc: '2.0',
@@ -65,20 +69,16 @@ export const connectWallet = async () => {
                     chainId
                 };
             } else {
-                return {
-                    status: '🦊 Connect to Metamask using the top right button.'
-                };
+                throw '🦊 Connect to Metamask.';
             }
         } catch (err) {
-            return {
-                address: '',
-                status: '😥 ' + err.message
-            };
+            if (err.message) {
+                throw err.message + ' 😥';
+            } else {
+                throw err + ' 😥';
+            }
         }
     } else {
-        return {
-            address: '',
-            status: 'You must install Metamask, a virtual Ethereum wallet, in your browser.'
-        };
+        throw 'You must install Metamask, a virtual Ethereum wallet, in your browser.';
     }
 };

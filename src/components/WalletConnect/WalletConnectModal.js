@@ -1,6 +1,10 @@
 import React, { Component, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { connectWallet } from '../../helpers/Web3';
+import { toast } from 'react-toastify';
+
+import metamaskIcon from '../../assets/images/metamask.png';
+import walletconnectIcon from '../../assets/images/walletconnect.png';
 
 export class WalletConnectModal extends Component {
     constructor(props) {
@@ -18,7 +22,7 @@ export class WalletConnectModal extends Component {
 
     render() {
         return this.state.shown ? (
-            <div className="nullius-wallet-modal-wrapper">
+            <div className="nullius-wallet-modal-wrapper" onClick={WalletConnectModal.hide}>
                 <div className="nullius-wallet-modal-container">
                     <WalletConnectModalComponent />
                     <div onClick={WalletConnectModal.hide} className="nullius-wallet-modal-close">
@@ -41,15 +45,23 @@ function WalletConnectModalComponent() {
                 disabled={loading}
                 onClick={async (e) => {
                     setLoading(true);
-                    const wallet = await connectWallet();
-                    if (wallet.address) {
+                    const wallet = await toast
+                        .promise(connectWallet, {
+                            pending: 'Connecting wallet',
+                            success: 'Wallet Connected 👌',
+                            error: {
+                                render(error) {
+                                    return error.data;
+                                }
+                            }
+                        })
+                        .catch(() => {});
+                    if (wallet?.address) {
                         WalletConnectModal.hide();
-                    } else {
-                        setLoading(false);
-                        s;
                     }
+                    setLoading(false);
                 }}>
-                <img src="https://opensea.io/static/images/logos/metamask-fox.svg" alt="Metamask" />
+                <img src={metamaskIcon} alt="Metamask" />
                 MetaMask
             </button>
             <button
@@ -57,7 +69,7 @@ function WalletConnectModalComponent() {
                 onClick={(e) => {
                     connectWallet();
                 }}>
-                <img src="https://static.opensea.io/logos/walletconnect-alternative.png" alt="WalletConnect" />
+                <img src={walletconnectIcon} alt="WalletConnect" />
                 WalletConnect
             </button>
         </div>

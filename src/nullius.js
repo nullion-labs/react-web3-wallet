@@ -70,7 +70,7 @@ export class Provider extends Component {
     render() {
         return (
             <WalletContext.Provider value={this.state}>
-                <ToastContainer />
+                <ToastContainer theme="dark" />
                 {this.props.children}
             </WalletContext.Provider>
         );
