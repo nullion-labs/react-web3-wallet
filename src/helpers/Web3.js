@@ -11,16 +11,15 @@ export const getCurrentWalletConnected = async () => {
                 method: 'eth_accounts'
             });
 
-            let balance = await window.ethereum.request({
-                method: 'eth_getBalance',
-                params: [addressArray[0], 'latest']
-            });
-            balance = parseBalance(balance);
-
-            let chainId = await window.ethereum.request({ method: 'eth_chainId' });
-            chainId = parseInt(chainId, 16);
-
             if (addressArray.length > 0) {
+                let balance = await window.ethereum.request({
+                    method: 'eth_getBalance',
+                    params: [addressArray[0], 'latest']
+                });
+                balance = parseBalance(balance);
+
+                let chainId = await window.ethereum.request({ method: 'eth_chainId' });
+                chainId = parseInt(chainId, 16);
                 return {
                     balance,
                     address: addressArray[0],
@@ -32,7 +31,6 @@ export const getCurrentWalletConnected = async () => {
                 };
             }
         } catch (err) {
-            console.log(err);
             return {
                 status: '😥 ' + err.message
             };
@@ -50,21 +48,27 @@ export const connectWallet = async () => {
                 method: 'eth_requestAccounts'
             });
 
-            let balance = await window.ethereum.request({
-                jsonrpc: '2.0',
-                method: 'eth_getBalance',
-                params: [addressArray[0], 'latest']
-            });
-            balance = parseBalance(balance);
+            if (addressArray.length > 0) {
+                let balance = await window.ethereum.request({
+                    jsonrpc: '2.0',
+                    method: 'eth_getBalance',
+                    params: [addressArray[0], 'latest']
+                });
+                balance = parseBalance(balance);
 
-            let chainId = await window.ethereum.request({ method: 'eth_chainId' });
-            chainId = parseInt(chainId, 16);
+                let chainId = await window.ethereum.request({ method: 'eth_chainId' });
+                chainId = parseInt(chainId, 16);
 
-            return {
-                balance,
-                address: addressArray[0],
-                chainId
-            };
+                return {
+                    balance,
+                    address: addressArray[0],
+                    chainId
+                };
+            } else {
+                return {
+                    status: '🦊 Connect to Metamask using the top right button.'
+                };
+            }
         } catch (err) {
             return {
                 address: '',
