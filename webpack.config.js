@@ -64,7 +64,7 @@ module.exports = {
     resolve: {
         alias: {
             react: path.resolve(__dirname, './node_modules/react'),
-            'react-dom': path.resolve(__dirname, './node_modules/react-dom')
+            'react-dom/client': path.resolve(__dirname, './node_modules/react-dom/client')
         }
     },
     externals: {
@@ -74,9 +74,9 @@ module.exports = {
             amd: 'React',
             root: 'React'
         },
-        'react-dom': {
-            commonjs: 'react-dom',
-            commonjs2: 'react-dom',
+        'react-dom/client': {
+            commonjs: 'react-dom/client',
+            commonjs2: 'react-dom/client',
             amd: 'ReactDOM',
             root: 'ReactDOM'
         }
