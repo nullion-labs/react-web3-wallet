@@ -1,6 +1,6 @@
 {
     "name": "react-web3-wallet",
-    "version": "0.0.13",
+    "version": "0.0.14",
     "description": "React wrapper for web3 wallet",
     "author": "Vukasin Pesic",
     "license": "MIT",
