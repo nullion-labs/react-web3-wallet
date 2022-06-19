@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 
 import { ToastContainer, toast } from 'react-toastify';
+import WalletConnect from '@walletconnect/client';
 
 import Web3 from 'web3/dist/web3.min.js';
-import { getCurrentWalletConnected } from './helpers/Web3';
+import { getCurrentWalletConnected, subscribe } from './helpers/Web3';
+import { getInfo } from './helpers/WalletConnect';
 
 export * from './components';
 
@@ -11,14 +13,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import './assets/scss/app.scss';
 
 const WalletContext = React.createContext();
+export const connector = new WalletConnect({ bridge: 'https://bridge.walletconnect.org' });
 
 export class Provider extends Component {
     static contextType = WalletContext;
     constructor(props) {
         super(props);
-        this.state = {};
-
-        Provider.testFunction = this.testFunction.bind(this);
+        this.state = { using: 'WalletConnect', connector, loading: true };
         this.refreshWallet = this.refreshWallet.bind(this);
 
         if (window.ethereum) {
@@ -28,6 +29,7 @@ export class Provider extends Component {
                     if (this.props.verbose) {
                         console.log('Subscribed to newBlockHeaders');
                     }
+                    //TODO: remove web3 (use rpc subscription)
                     this.subscription = this.state.web3.eth.subscribe('newBlockHeaders', async (error, event) => {
                         if (this.props.verbose) {
                             console.log('newBlockHeaders[', window.ethereum.chainId, '][', event.number, ']');
@@ -36,7 +38,10 @@ export class Provider extends Component {
                     });
                 }
             }
-
+            subscribe('connect', async (data) => {
+                const wallet = await getCurrentWalletConnected();
+                this.setState({ using: 'MetaMask', wallet, loading: false });
+            });
             if (window.ethereum.selectedAddress) {
                 this.state.wallet = {
                     address: window.ethereum.selectedAddress,
@@ -56,16 +61,32 @@ export class Provider extends Component {
                 this.refreshWallet();
             });
         }
+        if (connector) {
+            connector.on('session_update', async (error, payload) => {
+                console.log(`connector.on("session_update")`, payload);
+                this.refreshWallet();
+            });
+            connector.on('connect', async (error, payload) => {
+                console.log(`connector.on("connect")`, payload);
+                this.setState({ using: 'WalletConnect' });
+                await this.refreshWallet();
+                ConnectWalletModal.hide();
+            });
+            connector.on('disconnect', (error, payload) => {
+                console.log(`connector.on("disconnect")`, payload);
+                this.setState({ wallet: undefined });
+            });
+            this.refreshWallet();
+        }
     }
     async refreshWallet() {
-        const wallet = await getCurrentWalletConnected();
-        this.setState({ wallet });
-    }
-    async componentDidMount() {
-        this.refreshWallet();
-    }
-    testFunction(e) {
-        toast.success(e);
+        if (this.state.using === 'WalletConnect') {
+            const wallet = await getInfo();
+            this.setState({ wallet, loading: false });
+        } else {
+            const wallet = await getCurrentWalletConnected();
+            this.setState({ wallet, loading: false });
+        }
     }
     render() {
         return (

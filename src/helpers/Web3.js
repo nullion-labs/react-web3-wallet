@@ -1,8 +1,9 @@
-import Web3 from 'web3/dist/web3.min.js';
+import { fromWei } from './common';
 import { toast } from 'react-toastify';
+import Web3 from 'web3/dist/web3.min.js';
 
 function parseBalance(balance, decimal) {
-    return parseFloat(Web3.utils.fromWei(Web3.utils.toBN(balance).toString()));
+    return parseFloat(fromWei(Web3.utils.toBN(balance).toString(), decimal));
 }
 
 export const getCurrentWalletConnected = async () => {
@@ -42,6 +43,22 @@ export const getCurrentWalletConnected = async () => {
         };
     }
 };
+const subscribers = {};
+function publish(eventName, data) {
+    if (!Array.isArray(subscribers[eventName])) {
+        return;
+    }
+    subscribers[eventName].forEach((callback) => {
+        callback(data);
+    });
+}
+export function subscribe(eventName, callback) {
+    if (!Array.isArray(subscribers[eventName])) {
+        subscribers[eventName] = [];
+    }
+    subscribers[eventName].push(callback);
+}
+
 export const connectWallet = async () => {
     if (window.ethereum) {
         try {
@@ -53,6 +70,7 @@ export const connectWallet = async () => {
                     throw e.message;
                 });
             if (addressArray.length > 0) {
+                publish('connect');
                 let balance = await window.ethereum.request({
                     jsonrpc: '2.0',
                     method: 'eth_getBalance',

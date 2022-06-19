@@ -1,14 +1,18 @@
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
+
 module.exports = {
     mode: 'production',
     entry: './src/nullius.js',
     output: {
         path: path.resolve('dist'),
         filename: 'nullius.js',
+        // path: path.resolve('src/build'),
+        // filename: 'build.js',
         libraryTarget: 'commonjs2'
     },
-    plugins: [new CleanWebpackPlugin()],
+    plugins: [new CleanWebpackPlugin(), new NodePolyfillPlugin()],
     module: {
         rules: [
             {

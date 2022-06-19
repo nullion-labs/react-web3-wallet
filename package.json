@@ -16,7 +16,7 @@
         "url": "https://github.com/nullion-labs/react-web3-wallet/issues"
     },
     "scripts": {
-        "start": "react-scripts start",
+        "start": "react-app-rewired start",
         "build": "webpack",
         "update": "webpack && git add . && git commit -m update && git push && npm version patch && npm publish"
     },
@@ -24,13 +24,18 @@
         "@babel/core": "^7.18.2",
         "@babel/preset-env": "^7.18.2",
         "@babel/preset-react": "^7.17.12",
+        "@walletconnect/client": "^1.7.8",
+        "axios": "^0.27.2",
         "babel-loader": "^8.2.5",
         "clean-webpack-plugin": "^4.0.0",
         "css-loader": "^6.7.1",
         "file-loader": "^6.2.0",
+        "node-polyfill-webpack-plugin": "^1.1.4",
         "node-sass": "^7.0.1",
         "react": "^18.1.0",
+        "react-app-rewired": "^2.2.1",
         "react-dom": "^18.1.0",
+        "react-qr-code": "^2.0.7",
         "react-router-dom": "^6.3.0",
         "react-scripts": "^5.0.1",
         "react-toastify": "^9.0.4",

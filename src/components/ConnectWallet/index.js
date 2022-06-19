@@ -1,12 +1,16 @@
 import React from 'react';
-import { WalletConnectModal } from './WalletConnectModal';
+import { ConnectWalletModal } from './ConnectWalletModal';
 import { useWallet } from '../../nullius';
 
-export default function WalletConnect() {
-    const { wallet } = useWallet();
+export default function ConnectWallet() {
+    const { wallet, loading } = useWallet();
     return (
         <div className="nullius-wallet-connect">
-            {wallet?.address ? (
+            {loading ? (
+                <div className="nullius-wallet-connect-content">
+                    <div className="nullius-wallet-connect-loading" />
+                </div>
+            ) : wallet?.address ? (
                 <div className="nullius-wallet-connect-address">
                     {typeof wallet.balance !== 'undefined' && <span>{wallet.balance.toFixed(2)} ETH</span>}
                     <span>
@@ -18,7 +22,7 @@ export default function WalletConnect() {
                     <button
                         className="nullius-wallet-connect-button"
                         onClick={(e) => {
-                            WalletConnectModal.show();
+                            ConnectWalletModal.show();
                         }}>
                         Connect Wallet
                     </button>
