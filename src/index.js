@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Provider, ConnectWallet } from './nullius';
+import { Provider, ConnectWallet, useWallet, useContract, getContract } from './nullius';
 
 export default class Index extends Component {
     constructor(props) {
@@ -19,11 +19,23 @@ export default class Index extends Component {
                 }}>
                 <Provider verbose>
                     <ConnectWallet />
+                    <Test />
                 </Provider>
             </div>
         );
     }
 }
+
+const Test = () => {
+    const w = useWallet();
+    const contract = useContract('0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d', 'erc721');
+    const test = async () => {
+        const name = await contract.call('name');
+        console.log(name);
+        // const res = await contract.send('toggleWhitelist', [false]);
+    };
+    return <h1 onClick={test}>hello</h1>;
+};
 
 const container = document.getElementById('root');
 const root = createRoot(container);

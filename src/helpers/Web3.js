@@ -6,6 +6,22 @@ function parseBalance(balance, decimal) {
     return parseFloat(fromWei(Web3.utils.toBN(balance).toString(), decimal));
 }
 
+const subscribers = {};
+function publish(eventName, data) {
+    if (!Array.isArray(subscribers[eventName])) {
+        return;
+    }
+    subscribers[eventName].forEach((callback) => {
+        callback(data);
+    });
+}
+export function subscribe(eventName, callback) {
+    if (!Array.isArray(subscribers[eventName])) {
+        subscribers[eventName] = [];
+    }
+    subscribers[eventName].push(callback);
+}
+
 export const getCurrentWalletConnected = async () => {
     if (window.ethereum) {
         try {
@@ -19,7 +35,8 @@ export const getCurrentWalletConnected = async () => {
                     params: [addressArray[0], 'latest']
                 });
                 balance = parseBalance(balance);
-
+                // let subscription = await window.ethereum.request({ jsonrpc: '2.0', id: 1, method: 'eth_subscribe', params: ['newHeads'] });
+                // console.log(subscription);
                 let chainId = await window.ethereum.request({ method: 'eth_chainId' });
                 chainId = parseInt(chainId, 16);
                 return {
@@ -43,22 +60,6 @@ export const getCurrentWalletConnected = async () => {
         };
     }
 };
-const subscribers = {};
-function publish(eventName, data) {
-    if (!Array.isArray(subscribers[eventName])) {
-        return;
-    }
-    subscribers[eventName].forEach((callback) => {
-        callback(data);
-    });
-}
-export function subscribe(eventName, callback) {
-    if (!Array.isArray(subscribers[eventName])) {
-        subscribers[eventName] = [];
-    }
-    subscribers[eventName].push(callback);
-}
-
 export const connectWallet = async () => {
     if (window.ethereum) {
         try {
@@ -71,6 +72,8 @@ export const connectWallet = async () => {
                 });
             if (addressArray.length > 0) {
                 publish('connect');
+                let subscription = await window.ethereum.request({ jsonrpc: '2.0', id: 1, method: 'eth_subscribe', params: ['newHeads'] });
+                console.log(subscription);
                 let balance = await window.ethereum.request({
                     jsonrpc: '2.0',
                     method: 'eth_getBalance',

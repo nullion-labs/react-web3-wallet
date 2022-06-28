@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import WalletConnect from '@walletconnect/client';
 
@@ -19,7 +19,7 @@ export class Provider extends Component {
     static contextType = WalletContext;
     constructor(props) {
         super(props);
-        this.state = { using: 'WalletConnect', connector, loading: true };
+        this.state = { using: 'MetaMask', connector, loading: true, contracts: {} };
         this.refreshWallet = this.refreshWallet.bind(this);
 
         if (window.ethereum) {
@@ -90,7 +90,7 @@ export class Provider extends Component {
     }
     render() {
         return (
-            <WalletContext.Provider value={this.state}>
+            <WalletContext.Provider value={{ ...this.state }}>
                 <ToastContainer theme="dark" />
                 {this.props.children}
             </WalletContext.Provider>
@@ -104,9 +104,121 @@ export function useWallet() {
     }
     return context;
 }
+const standards = {
+    erc721: { abi: require('./assets/abis/ERC721.json') },
+    erc1155: { abi: require('./assets/abis/ERC1155.json') }
+};
+class Contract {
+    constructor(props) {
+        this.context = props.context;
+        this.standard = props.standard;
+        this.address = props.address;
+        this.contract = new props.context.web3.eth.Contract(standards[props.standard].abi, props.address);
+        this.call = this.call.bind(this);
+        this.send = this.send.bind(this);
+    }
+    async call(functionName, params) {
+        if (this.context.wallet.address) {
+            let tx;
+            if (params) {
+                tx = this.contract.methods[functionName](...params);
+            } else {
+                tx = this.contract.methods[functionName]();
+            }
+            return new Promise((resolve, reject) => {
+                tx.call({ from: this.context.wallet.address })
+                    .then((e) => {
+                        resolve(e);
+                    })
+                    .catch((error) => {
+                        toast.error(error.message);
+                        reject(error.message);
+                    });
+            });
+        } else {
+            toast.error('No wallet connected');
+            return 'No wallet connected';
+        }
+    }
+    async send(functionName, params, onReceipt, onTransactionHash, onError) {
+        if (this.context.wallet.address) {
+            let tx;
+            if (params) {
+                tx = this.contract.methods[functionName](...params);
+            } else {
+                tx = this.contract.methods[functionName]();
+            }
+            const estimation = await tx.estimateGas({ from: this.context.wallet.address }).catch((error) => {
+                toast.error(error.message.split('\n')[0]);
+                return error.message.split('\n')[0];
+            });
+            console.log('Estimated gas:', estimation);
+            if (estimation) {
+                return new Promise((resolve, reject) => {
+                    tx.send({ from: this.context.wallet.address })
+                        .on('receipt', function (receipt) {
+                            if (receipt.status == true) {
+                                toast.update(this.toastId, {
+                                    render: 'Transaction sent succesfully.',
+                                    type: toast.TYPE.SUCCESS,
+                                    autoClose: 1000
+                                });
+                            } else {
+                                toast.update(this.toastId, {
+                                    render: 'Transaction failed to send.',
+                                    type: toast.TYPE.ERROR,
+                                    autoClose: 1000
+                                });
+                            }
+                            if (onReceipt) {
+                                onReceipt(receipt);
+                            }
+                            resolve(receipt);
+                        })
+                        .on('transactionHash', function (transactionHash) {
+                            this.toastId = toast('Sending transaction...', {
+                                autoClose: false,
+                                type: toast.TYPE.INFO
+                            });
+                            if (onTransactionHash) {
+                                onTransactionHash(transactionHash);
+                            }
+                        })
+                        .catch((error) => {
+                            if (this.toastId) {
+                                toast.update(this.toastId, {
+                                    render: error.message,
+                                    type: toast.TYPE.ERROR,
+                                    autoClose: 1000
+                                });
+                            } else {
+                                toast.error(error.message);
+                            }
+
+                            if (onError) {
+                                onError(error.message);
+                            }
+                            reject(error.message);
+                        });
+                });
+            }
+        } else {
+            toast.error('No wallet connected');
+            return 'No wallet connected';
+        }
+    }
+}
+export function useContract(address, standard) {
+    const context = React.useContext(WalletContext);
+    if (standards[standard] && context.web3) {
+        const sc = new Contract({ context, address, standard });
+        return sc;
+    }
+    return null;
+}
 export function withWallet(WrappedComponent) {
     return class extends React.Component {
-        static contextType = Context;
+        static contextType = WalletContext;
         render() {
             return <WrappedComponent {...this.context} {...this.props} />;
         }
