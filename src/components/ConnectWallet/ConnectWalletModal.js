@@ -10,6 +10,7 @@ import walletconnectIcon from '../../assets/images/walletconnect.png';
 import QRCode from 'react-qr-code';
 import { connector } from '../../nullius';
 
+
 export class ConnectWalletModal extends Component {
     constructor(props) {
         super(props);
@@ -45,6 +46,7 @@ export class ConnectWalletModal extends Component {
 function ConnectWalletModalComponent() {
     const [loading, setLoading] = useState(false);
     const [WCQRCode, setWCQRCode] = useState();
+    const [noMetamask, setNoMetamask] = useState();
     const walletConnect = async () => {
         setLoading(true);
         const _uri = await getURI(connector);
@@ -53,26 +55,37 @@ function ConnectWalletModalComponent() {
     };
     const metamaskConnect = async (e) => {
         setLoading(true);
-        const wallet = await toast
-            .promise(connectWallet, {
-                pending: 'Connecting wallet',
-                success: 'Wallet Connected 👌',
-                error: {
-                    render(error) {
-                        return error.data;
+        if (window.ethereum) {
+            const wallet = await toast
+                .promise(connectWallet, {
+                    pending: 'Connecting wallet',
+                    success: 'Wallet Connected 👌',
+                    error: {
+                        render(error) {
+                            return error.data;
+                        }
                     }
-                }
-            })
-            .catch(() => {});
-        if (wallet?.address) {
-            ConnectWalletModal.hide();
+                })
+                .catch(() => {});
+            if (wallet?.address) {
+                ConnectWalletModal.hide();
+            }
+        } else {
+            setNoMetamask(true);
         }
         setLoading(false);
     };
     return (
         <div className="nullius-wallet-modal-content" style={{ pointerEvents: loading === true ? 'none' : 'all' }}>
             <h1>Connect your wallet.</h1>
-            {WCQRCode ? (
+            {noMetamask ? (
+                <div style={{ display: 'flex', marginTop: 30, justifyContent: 'center', flexDirection: 'column' }}>
+                    <h3 style={{marginTop: 0}}>No MetaMask found in your browser.</h3>
+                    <span>
+                        Please <a href="https://metamask.io/download/" target="_blank">Download MetaMask.</a>
+                    </span>
+                </div>
+            ) : WCQRCode ? (
                 <div style={{ display: 'flex', marginTop: 30, marginBottom: 30, justifyContent: 'center' }}>
                     <QRCode value={WCQRCode} bgColor="transparent" fgColor="#fff" renderAs="svg" level="H" />
                 </div>

@@ -7,6 +7,8 @@ import Web3 from 'web3/dist/web3.min.js';
 import { getCurrentWalletConnected, subscribe } from './helpers/Web3';
 import { getInfo } from './helpers/WalletConnect';
 
+import abis from 'erc-abis';
+
 export * from './components';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -15,11 +17,13 @@ import './assets/scss/app.scss';
 const WalletContext = React.createContext();
 export const connector = new WalletConnect({ bridge: 'https://bridge.walletconnect.org' });
 
+//TODO: refractor
+
 export class Provider extends Component {
     static contextType = WalletContext;
     constructor(props) {
         super(props);
-        this.state = { using: 'MetaMask', connector, loading: true, contracts: {} };
+        this.state = { using: 'MetaMask', connector, loading: true, contracts: {}, chainId: props.chainId };
         this.refreshWallet = this.refreshWallet.bind(this);
 
         if (window.ethereum) {
@@ -104,16 +108,13 @@ export function useWallet() {
     }
     return context;
 }
-const standards = {
-    erc721: { abi: require('./assets/abis/ERC721.json') },
-    erc1155: { abi: require('./assets/abis/ERC1155.json') }
-};
+
 class Contract {
     constructor(props) {
         this.context = props.context;
         this.standard = props.standard;
         this.address = props.address;
-        this.contract = new props.context.web3.eth.Contract(standards[props.standard].abi, props.address);
+        this.contract = new props.context.web3.eth.Contract(abis[props.standard], props.address);
         this.call = this.call.bind(this);
         this.send = this.send.bind(this);
     }
@@ -210,8 +211,8 @@ class Contract {
 }
 export function useContract(address, standard) {
     const context = React.useContext(WalletContext);
-    if (standards[standard] && context.web3) {
-        const sc = new Contract({ context, address, standard });
+    if (abis[standard.toUpperCase()] && context.web3) {
+        const sc = new Contract({ context, address, standard: standard.toUpperCase() });
         return sc;
     }
     return null;

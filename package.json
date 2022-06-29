@@ -66,5 +66,8 @@
         "web3 wallet",
         "wallet",
         "react"
-    ]
+    ],
+    "dependencies": {
+        "erc-abis": "^0.0.1"
+    }
 }
