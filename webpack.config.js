@@ -10,7 +10,8 @@ module.exports = {
         filename: 'nullius.js',
         // path: path.resolve('src/build'),
         // filename: 'build.js',
-        libraryTarget: 'commonjs2'
+        libraryTarget: 'commonjs2',
+        publicPath: ''
     },
     plugins: [new CleanWebpackPlugin(), new NodePolyfillPlugin()],
     module: {
