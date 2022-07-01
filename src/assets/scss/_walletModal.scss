@@ -65,6 +65,10 @@
         &:hover {
             color: rgb(141, 204, 168);
         }
+        &:disabled{
+            color: rgba(255,255,255,0.3);
+            cursor: default;
+        }
         img {
             width: 30px;
             height: 30px;

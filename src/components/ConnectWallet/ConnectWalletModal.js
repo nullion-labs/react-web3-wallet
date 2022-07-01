@@ -10,7 +10,6 @@ import walletconnectIcon from '../../assets/images/walletconnect.png';
 import QRCode from 'react-qr-code';
 import { connector } from '../../nullius';
 
-
 export class ConnectWalletModal extends Component {
     constructor(props) {
         super(props);
@@ -80,9 +79,12 @@ function ConnectWalletModalComponent() {
             <h1>Connect your wallet.</h1>
             {noMetamask ? (
                 <div style={{ display: 'flex', marginTop: 30, justifyContent: 'center', flexDirection: 'column' }}>
-                    <h3 style={{marginTop: 0}}>No MetaMask found in your browser.</h3>
+                    <h3 style={{ marginTop: 0 }}>No MetaMask found in your browser.</h3>
                     <span>
-                        Please <a href="https://metamask.io/download/" target="_blank">Download MetaMask.</a>
+                        Please{' '}
+                        <a href="https://metamask.io/download/" target="_blank">
+                            Download MetaMask.
+                        </a>
                     </span>
                 </div>
             ) : WCQRCode ? (
@@ -96,9 +98,10 @@ function ConnectWalletModalComponent() {
                         <img src={metamaskIcon} alt="Metamask" />
                         MetaMask
                     </button>
-                    <button disabled={loading} onClick={walletConnect}>
+                    <button disabled={true} onClick={walletConnect} style={{ position: 'relative' }}>
                         <img src={walletconnectIcon} alt="WalletConnect" />
                         WalletConnect
+                        <div style={{ position: 'absolute', right: 16, fontSize: 10 }}>Not Supported Yet.</div>
                     </button>
                 </React.Fragment>
             )}

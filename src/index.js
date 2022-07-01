@@ -17,7 +17,7 @@ export default class Index extends Component {
                     width: '100%',
                     height: '100vh'
                 }}>
-                <Provider verbose chainId={1}>
+                <Provider verbose chainId={4}>
                     <ConnectWallet />
                     <Test />
                 </Provider>
@@ -32,13 +32,8 @@ const Test = () => {
     const [SCName, setSCName] = useState('');
     const [SCSymbol, setSCSymbol] = useState('');
     const test = async () => {
-        const name = await contract.call('name');
+        const name = await w.sign('hello World');
         console.log(name);
-        setSCName(name);
-
-        const symbol = await contract.call('symbol');
-        console.log(symbol);
-        setSCSymbol(symbol);
         // const res = await contract.send('toggleWhitelist', [false]);
     };
     return (
